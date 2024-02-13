@@ -19,6 +19,7 @@ export default function AutocompleteInput({
       value={selectedOption}
       options={options}
       autoHighlight
+      isOptionEqualToValue={(option, value) => option.label === value.label}
       getOptionLabel={(option) => option.label}
       onChange={(e, option) => handleOptionSelect(formName, option)}
       renderOption={(props, option) => (
