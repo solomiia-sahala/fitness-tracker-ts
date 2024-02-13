@@ -15,11 +15,13 @@ import ActivityList from '../components/ActivityList';
 import Firebase from '../services/firebase.service';
 import { Activity } from '../interfaces/activity.interface';
 import { ActionTypes } from '../enums/actionTypes.enum';
+import SnackBar from '../components/SnackBar';
+import { SnackBarMessages } from '../constants/snackBarMessages.const';
 
 function Dashboard({ firebase }: { firebase: Firebase }): JSX.Element {
   const [open, setOpen] = useState<boolean>(true);
   const [selectedActivity, setSelectedActivity] = useState<{activity: Activity, key: string} | null>(null);
-  // const [openSnackbar, setOpenSnackbar] = useState<boolean>(false);
+  const [snackbarConfig, setSnackbarConfig] = useState<{ isOpen: boolean, message: string }>({ isOpen: false, message: '' });
   const navigate: NavigateFunction = useNavigate();
   const toggleDrawer = (): void => {
     setOpen(!open);
@@ -34,20 +36,29 @@ function Dashboard({ firebase }: { firebase: Firebase }): JSX.Element {
   };
 
   const handleAction = (actionType: ActionTypes, activity: Activity | null, userId: string, key?: string): void => {
+    let request: Promise<any>;
+
     switch (actionType) {
       case ActionTypes.Create:
-        firebase.addActivity(userId, activity!);
+        request = firebase.addActivity(userId, activity!);
         break;
       case ActionTypes.Update:
-        firebase.updateActivity(userId, activity, key!).then(() => {
+        request = firebase.updateActivity(userId, activity, key!).then(() => {
           setSelectedActivity(null);
         });
         break;
       case ActionTypes.Delete:
-        firebase.updateActivity(userId, null, key!);
+        request = firebase.updateActivity(userId, null, key!);
         break;
       default:
     }
+
+    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+    // @ts-ignore
+    request.then(() => {
+      setSnackbarConfig({ isOpen: true, message: SnackBarMessages[actionType] });
+      setTimeout(() => setSnackbarConfig((prev) => ({ ...prev, isOpen: false })), 3000);
+    });
   };
 
   const onEditActivity = (activity: Activity, key: string): void => {
@@ -109,20 +120,20 @@ function Dashboard({ firebase }: { firebase: Firebase }): JSX.Element {
             <Toolbar />
             <Container maxWidth="lg" sx={{ mt: 4, mb: 4 }}>
               <Grid container spacing={4}>
-                <Grid item xs={12} md={6} lg={4}>
-                  <Paper
-                    sx={{
-                      p: 2,
-                      display: 'flex',
-                      flexDirection: 'column',
-                      height: 340,
-                      width: '100%',
-                    }}
-                  >
-                    {/* <Calendar user={user} firebase={props.firebase}/> */}
-                  </Paper>
-                </Grid>
-                <Grid item xs={12} md={6} lg={8}>
+                {/* <Grid item xs={12} md={6} lg={4}> */}
+                {/*  <Paper */}
+                {/*    sx={{ */}
+                {/*      p: 2, */}
+                {/*      display: 'flex', */}
+                {/*      flexDirection: 'column', */}
+                {/*      height: 340, */}
+                {/*      width: '100%', */}
+                {/*    }} */}
+                {/*  > */}
+                {/*     <Calendar user={user} firebase={props.firebase}/> */}
+                {/*  </Paper> */}
+                {/* </Grid> */}
+                <Grid item xs={12} md={6} lg={12}>
                   <Paper
                     sx={{
                       p: 2,
@@ -151,6 +162,7 @@ function Dashboard({ firebase }: { firebase: Firebase }): JSX.Element {
                   </Paper>
                 </Grid>
               </Grid>
+              <SnackBar isOpen={snackbarConfig.isOpen} message={snackbarConfig.message} />
             </Container>
           </Box>
         </Box>
