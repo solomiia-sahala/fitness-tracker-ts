@@ -70,6 +70,8 @@
     "@typescript-eslint/no-explicit-any": "warn",
     "react/react-in-jsx-scope": "off",
     "react/no-array-index-key": "off",
-    "react/function-component-definition": "off"
+    "react/function-component-definition": "off",
+    "react/jsx-props-no-spreading": "off",
+    "react/destructuring-assignment": "off"
   }
 }

@@ -1,21 +1,21 @@
 import { JSX, useEffect, useState } from 'react';
 import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
-import SnackBar from './SnackBar';
 import { Activity } from '../interfaces/activity.interface';
 import Firebase from '../services/firebase.service';
 import ActivitiesTable from './Table';
+import { ActionTypes } from '../enums/actionTypes.enum';
 
-const ActivityList = ({ userId, firebase }: {
+const ActivityList = ({
+  userId, handleAction, firebase, onEdit,
+}: {
   userId: string;
+  handleAction: (actionType: ActionTypes, activity: Activity | null, userId: string, key: string) => void,
+  onEdit: (activity: Activity, key: string)=> void,
   firebase: Firebase
 }): JSX.Element => {
   const [activities, setActivities] = useState({});
   const [loading, setLoading] = useState<boolean>(true);
-  const [snackbar, setSnackbar] = useState<{ isOpen: boolean, message: string }>({
-    isOpen: false,
-    message: '',
-  });
 
   const onActivitiesChange = (allActivities: any): void => {
     setActivities(allActivities);
@@ -30,38 +30,34 @@ const ActivityList = ({ userId, firebase }: {
     return (() => unsubscribe());
   }, []);
 
+  // const editActivity = (activity: Activity, i: number): void => {
+  //   const activityKey = Object.keys(activities)[i];
+  //   handleAction(ActionTypes.RequestUpdate, activity, userId, activityKey);
+  // };
+
   const editActivity = (activity: Activity, i: number): void => {
     const activityKey = Object.keys(activities)[i];
-    firebase.updateActivity(userId, activity, activityKey);
+    onEdit(activity, activityKey);
   };
 
   const deleteActivity = (i: number): void => {
     const activityKey = Object.keys(activities)[i];
-    firebase.updateActivity(userId, null, activityKey).then(() => {
-      setSnackbar({ isOpen: true, message: 'Activity is deleted' });
-      setTimeout(() => {
-        setSnackbar({ isOpen: false, message: '' });
-      }, 3000);
-    }).catch((error: Error) => console.error(error.message));
+    handleAction(ActionTypes.Delete, null, userId, activityKey);
   };
 
   return (
-    <>
-      {loading
-        ? (
-          <Box style={{ display: 'flex', justifyContent: 'center' }}>
-            <CircularProgress />
-          </Box>
-        )
-        : (
-          <ActivitiesTable
-            activities={activities}
-            onEditAction={editActivity}
-            onDeleteAction={deleteActivity}
-          />
-        )}
-      <SnackBar isOpen={snackbar.isOpen} message={snackbar.message} />
-    </>
+    loading ? (
+      <Box style={{ display: 'flex', justifyContent: 'center' }}>
+        <CircularProgress />
+      </Box>
+    )
+      : (
+        <ActivitiesTable
+          activities={activities}
+          onEditAction={editActivity}
+          onDeleteAction={deleteActivity}
+        />
+      )
   );
 };
 

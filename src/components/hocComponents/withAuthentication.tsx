@@ -1,11 +1,11 @@
 import React from 'react';
+import { Unsubscribe } from 'firebase/auth';
 import { withFirebase } from './withFirebase';
 import AuthenticationContext from '../../contexts/authContext';
-import { Unsubscribe } from 'firebase/auth';
-import Firebase from '../../services/firebase.service';
 
-export const withAuthentication = (Component: typeof React.Component) => {
-  class WithAuthentication extends React.Component {
+export const withAuthentication = (Component: typeof React.Component):
+    (props: any) => JSX.Element => {
+  class WithAuthentication extends React.Component<NonNullable<unknown>, { user: any }> {
     listener!: Unsubscribe;
 
     constructor(props: any) {
@@ -15,23 +15,20 @@ export const withAuthentication = (Component: typeof React.Component) => {
     }
 
     componentDidMount(): void {
+      // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-ignore
-      this.listener = (this.props.firebase as Firebase).auth.onAuthStateChanged(
-        user => {
-          user
-            ? this.setState({ user })
-            : this.setState({ user: null });
-        },
+      this.listener = this.props.firebase.auth.onAuthStateChanged(
+        (user: any | null) => (user ? this.setState({ user })
+          : this.setState({ user: null })),
       );
     }
 
-    componentWillUnmount() {
+    componentWillUnmount(): void {
       this.listener();
     }
 
-    render() {
+    render(): any {
       return (
-      // @ts-ignore
         <AuthenticationContext.Provider value={this.state.user}>
           <Component {...this.props} />
         </AuthenticationContext.Provider>
@@ -41,5 +38,3 @@ export const withAuthentication = (Component: typeof React.Component) => {
 
   return withFirebase(WithAuthentication);
 };
-
-export default withAuthentication;

@@ -4,6 +4,6 @@ import Firebase from '../../services/firebase.service';
 
 export const withFirebase = (Component: typeof React.Component) => (props: any) => (
   <FirebaseContext.Consumer>
-    {(firebase: Firebase) => <Component {...props} firebase={firebase}/>}
+    {(firebase: Firebase) => <Component {...props} firebase={firebase} />}
   </FirebaseContext.Consumer>
 );
