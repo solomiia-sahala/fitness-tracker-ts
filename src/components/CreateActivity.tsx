@@ -38,8 +38,8 @@ function CreateActivity({
     const { name, value } = event.target as HTMLInputElement;
     setActivity({ ...activity, [name]: value });
   };
-  const handleOptionSelect = (key: string, value: string): void => {
-    setActivity({ ...activity, [key]: value });
+  const handleOptionSelect = (key: string, value: Option | null): void => {
+    setActivity({ ...activity, [key]: value?.label });
   };
 
   const handleSubmit = (): void => {
@@ -63,6 +63,7 @@ function CreateActivity({
         <Grid item xs={12}>
           <AutocompleteInput
             inputLabel="Choose the activity type"
+            selectedOption={activity.type ? { label: activity.type } as Option : null}
             options={activityType}
             formName="type"
             handleOptionSelect={handleOptionSelect}
@@ -87,8 +88,8 @@ function CreateActivity({
         <Grid item xs={12}>
           <AutocompleteInput
             inputLabel="Choose the Intensity"
+            selectedOption={activity.level ? { label: activity.level } as Option : null}
             options={levelIntensity}
-            selectedOption={activity.level}
             formName="level"
             handleOptionSelect={handleOptionSelect}
           />

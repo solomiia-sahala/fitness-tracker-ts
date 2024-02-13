@@ -4,24 +4,28 @@ import TextField from '@mui/material/TextField';
 import Autocomplete from '@mui/material/Autocomplete';
 import { Option } from '../interfaces/option.interface';
 
-export default function AutocompleteInput({ options, selectedOption, inputLabel, handleOptionSelect, formName }: {
+export default function AutocompleteInput({
+  options, selectedOption, inputLabel, handleOptionSelect, formName,
+}: {
   options: Option[];
-  selectedOption?: any;
+  selectedOption: Option | null;
   inputLabel: string;
   formName: string;
-  handleOptionSelect: Function
-}) {
-
+  handleOptionSelect: (formName: string, selectedOption: Option | null) => void
+}): JSX.Element {
   return (
     <Autocomplete
       sx={{ width: 300 }}
+      value={selectedOption}
       options={options}
       autoHighlight
       getOptionLabel={(option) => option.label}
-      onChange={(e, newValue) => handleOptionSelect(formName, newValue?.label)}
+      onChange={(e, option) => handleOptionSelect(formName, option)}
       renderOption={(props, option) => (
         <Box component="li" sx={{ '& > img': { mr: 2, flexShrink: 0 } }} {...props}>
-          {option.icon && option.icon} {option.label}
+          {option.icon && option.icon}
+          {' '}
+          {option.label}
         </Box>
       )}
       renderInput={(params) => (
