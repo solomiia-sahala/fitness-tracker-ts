@@ -30,11 +30,6 @@ const ActivityList = ({
     return (() => unsubscribe());
   }, []);
 
-  // const editActivity = (activity: Activity, i: number): void => {
-  //   const activityKey = Object.keys(activities)[i];
-  //   handleAction(ActionTypes.RequestUpdate, activity, userId, activityKey);
-  // };
-
   const editActivity = (activity: Activity, i: number): void => {
     const activityKey = Object.keys(activities)[i];
     onEdit(activity, activityKey);

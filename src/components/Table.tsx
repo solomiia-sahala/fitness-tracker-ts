@@ -24,6 +24,7 @@ const ActivitiesTable = ({
     <Table stickyHeader>
       <TableHead>
         <TableRow>
+          <TableCell>Date</TableCell>
           <TableCell>Type</TableCell>
           <TableCell>Level</TableCell>
           <TableCell>Duration</TableCell>
@@ -32,12 +33,13 @@ const ActivitiesTable = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.values(activities).map((activity: any, i: number) => {
+        {Object.values(activities || {}).map((activity: any, i: number) => {
           const {
-            level, type, duration, addInfo,
+            level, type, duration, addInfo, date,
           } = activity;
           return (
             <TableRow key={i}>
+              <TableCell>{date}</TableCell>
               <TableCell>{type}</TableCell>
               <TableCell>{level}</TableCell>
               <TableCell>{`${duration} min.`}</TableCell>

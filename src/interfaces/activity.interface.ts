@@ -4,5 +4,6 @@ export interface Activity {
   duration: number,
   type: string | null,
   level: ExerciseLevel | null,
-  addInfo: string
+  addInfo: string,
+  date: string
 }

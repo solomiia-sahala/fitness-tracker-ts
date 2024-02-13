@@ -4,6 +4,9 @@ import {
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import DeleteIcon from '@mui/icons-material/Delete';
+import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
+import dayjs from 'dayjs';
+import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { activityType } from '../constants/activityTypes.const';
 import AutocompleteInput from './AutocompleteInput';
 import { ExerciseLevel } from '../enums/exerciseLevels.enum';
@@ -12,12 +15,15 @@ import { Option } from '../interfaces/option.interface';
 import { ActionTypes } from '../enums/actionTypes.enum';
 
 const levelIntensity: Option[] = Object.values(ExerciseLevel).map((level: ExerciseLevel) => ({ label: level } as Option));
+const dateFormat: string = 'YYYY-MM-DD';
+const today = dayjs().format(dateFormat);
 
 const defaultActivityData: Activity = {
   duration: 30,
   type: null,
   level: null,
   addInfo: '',
+  date: today,
 };
 
 function CreateActivity({
@@ -60,7 +66,15 @@ function CreateActivity({
         { selectedActivity?.activity ? 'Update the activity ' : 'Create new activity ' }
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12}>
+        <Grid item xs={12} style={{ display: 'flex', gap: '50px' }}>
+          <LocalizationProvider dateAdapter={AdapterDayjs}>
+            <DatePicker
+              value={dayjs(activity.date)}
+              disablePast
+              views={['year', 'month', 'day']}
+              onChange={(date) => setActivity((prev) => ({ ...prev, date: date!.format(dateFormat) }))}
+            />
+          </LocalizationProvider>
           <AutocompleteInput
             inputLabel="Choose the activity type"
             selectedOption={activity.type ? { label: activity.type } as Option : null}
