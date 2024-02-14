@@ -3,7 +3,7 @@ import {
   Button, Grid, Slider, Stack, TextField, Typography,
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import DeleteIcon from '@mui/icons-material/Delete';
+import ClearIcon from '@mui/icons-material/Clear';
 import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
 import dayjs from 'dayjs';
 import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
@@ -134,7 +134,7 @@ function CreateActivity({
               </Button>
               <Button
                 variant="outlined"
-                endIcon={<DeleteIcon />}
+                endIcon={<ClearIcon />}
                 onClick={() => onCancel()}
               >
                 Cancel
