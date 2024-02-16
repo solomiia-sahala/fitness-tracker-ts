@@ -3,7 +3,7 @@ import CircularProgress from '@mui/material/CircularProgress';
 import Box from '@mui/material/Box';
 import { Activity } from '../interfaces/activity.interface';
 import Firebase from '../services/firebase.service';
-import ActivitiesTable from './Table';
+import ActivitiesTable from './ActivitiesTable';
 import { ActionTypes } from '../enums/actionTypes.enum';
 
 const ActivityList = ({

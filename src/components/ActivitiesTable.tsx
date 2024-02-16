@@ -33,10 +33,10 @@ const ActivitiesTable = ({
         </TableRow>
       </TableHead>
       <TableBody>
-        {Object.values(activities || {}).map((activity: any, i: number) => {
+        {Object.values(activities || {}).length ? Object.values(activities || {}).map((activity: any, i: number) => {
           const {
             level, type, duration, addInfo, date,
-          } = activity;
+          } = activity as Activity;
           return (
             <TableRow key={i}>
               <TableCell>{date}</TableCell>
@@ -44,7 +44,7 @@ const ActivitiesTable = ({
               <TableCell>{level}</TableCell>
               <TableCell>{`${duration} min.`}</TableCell>
               <TableCell>{addInfo}</TableCell>
-              <TableCell style={{ textAlign: 'center' }}>
+              <TableCell align="center">
                 <EditNoteIcon
                   onClick={() => onEditAction(activity, i)}
                   sx={{ cursor: 'pointer' }}
@@ -56,11 +56,11 @@ const ActivitiesTable = ({
               </TableCell>
             </TableRow>
           );
-        })}
+        })
+          : (<TableRow><TableCell align="center" colSpan={6}>No records found.</TableCell></TableRow>)}
       </TableBody>
     </Table>
   </TableContainer>
-
 );
 
 export default ActivitiesTable;
