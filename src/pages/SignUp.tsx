@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { JSX, useState } from 'react';
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined';
 import { CssBaseline, TextField } from '@mui/material';
 import Avatar from '@mui/material/Avatar';
@@ -7,11 +7,11 @@ import Box from '@mui/material/Box';
 import Button from '@mui/material/Button';
 import Grid from '@mui/material/Grid';
 import Container from '@mui/material/Container';
-import Copyright from '../components/Copyright';
 import { Link, useNavigate } from 'react-router-dom';
-import { withFirebase } from '../components/hocComponents/withFirebase';
 import red from '@mui/material/colors/red';
 import { UserCredential } from 'firebase/auth';
+import Copyright from '../components/Copyright';
+import { withFirebase } from '../components/hocComponents/withFirebase';
 
 interface UserSignUp {
   id: null | number;
@@ -30,40 +30,38 @@ const userInitialData: UserSignUp = {
   firstName: '',
   lastName: '',
   error: null,
-  auth: null
+  auth: null,
 };
 
-const SignUp = (props: any) => {
-  const [user, setUser] = useState<UserSignUp>(userInitialData)
+const SignUp = (props: any): JSX.Element => {
+  const [user, setUser] = useState<UserSignUp>(userInitialData);
   const navigate = useNavigate();
   const isValid = (): boolean => !!user.email && !!user.password && !!user.firstName && !!user.lastName;
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
     setUser((prev: UserSignUp) => ({ ...prev, [name]: value }));
-  }
+  };
   const handleSubmit = (): void => {
     props.firebase.createUserWithEmailAndPassword(user.email, user.password)
-      .then((authUser: UserCredential) => {
-        return props.firebase
-          .saveUserData(authUser.user.uid, {
-            firstName: user.firstName,
-            lastName: user.lastName,
-            email: user.email
-          })
-      })
+      .then((authUser: UserCredential) => props.firebase
+        .saveUserData(authUser.user.uid, {
+          firstName: user.firstName,
+          lastName: user.lastName,
+          email: user.email,
+        }))
       .then(() => {
         setUser(userInitialData);
-        navigate("/dashboard");
+        navigate('/dashboard');
       })
       .catch((error: Error) => {
-        setUser({ ...user, error: error.message })
-        console.error(error.message)
+        setUser({ ...user, error: error.message });
+        console.error(error.message);
       });
-  }
+  };
   return (
     <Container component="main" maxWidth="xs">
-      <CssBaseline/>
+      <CssBaseline />
       <Box
         sx={{
           marginTop: 8,
@@ -73,7 +71,7 @@ const SignUp = (props: any) => {
         }}
       >
         <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
-          <LockOutlinedIcon/>
+          <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
           Sign up
@@ -129,7 +127,7 @@ const SignUp = (props: any) => {
           </Grid>
           <Typography
             sx={{
-              color: red
+              color: red,
             }}
           >
             {user.error && user.error}
@@ -153,8 +151,8 @@ const SignUp = (props: any) => {
           </Grid>
         </Box>
       </Box>
-      <Copyright sx={{ mt: 8, mb: 4 }}/>
+      <Copyright sx={{ mt: 8, mb: 4 }} />
     </Container>
-  )
+  );
 };
 export default withFirebase(SignUp as unknown as typeof React.Component);

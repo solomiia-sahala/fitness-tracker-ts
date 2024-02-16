@@ -1,4 +1,3 @@
-import { withFirebase } from './hocComponents/withFirebase';
 import {
   Dialog,
   DialogActions,
@@ -7,16 +6,16 @@ import {
   DialogTitle,
   TextField,
   Button,
-  Link
+  Link,
 } from '@mui/material';
-import { useState } from 'react';
-import React from 'react';
+import React, { JSX, useState } from 'react';
+import { withFirebase } from './hocComponents/withFirebase';
 import SnackBar from './SnackBar';
 
-function PasswordReset(props: any) {
+function PasswordReset(props: any) : JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
-  const [state, setState] = useState<{ email: string, error: string | null }>({ email: '', error: null })
+  const [state, setState] = useState<{ email: string, error: string | null }>({ email: '', error: null });
 
   const handleClickOpen = (): void => {
     setOpen(true);
@@ -24,13 +23,13 @@ function PasswordReset(props: any) {
 
   const handleClose = (): void => {
     setOpen(false);
-    setState({ email: '', error: null })
+    setState({ email: '', error: null });
   };
 
   const handleChange = (event: React.ChangeEvent<HTMLInputElement>): void => {
     const { name, value } = event.target;
     setState({ ...state, [name]: value });
-  }
+  };
 
   const handleSubmit = (): void => {
     props.firebase.resetPassword(state.email)
@@ -40,7 +39,7 @@ function PasswordReset(props: any) {
         setOpenAlert(true);
         setTimeout(() => {
           setOpenAlert(false);
-        }, 3000)
+        }, 3000);
       })
       .catch((error: Error) => {
         setState((prev) => ({ ...prev, error: error.message }));
@@ -51,6 +50,7 @@ function PasswordReset(props: any) {
 
   return (
     <>
+      {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
       <Link onClick={handleClickOpen}>
         Forgot password?
       </Link>
@@ -84,9 +84,9 @@ function PasswordReset(props: any) {
         </DialogActions>
       </Dialog>
 
-      <SnackBar isOpen={openAlert} message={"Password reset link successfully sent"}/>
+      <SnackBar isOpen={openAlert} message="Password reset link successfully sent" />
     </>
-  )
+  );
 }
 
 export default withFirebase(PasswordReset as unknown as typeof React.Component);
