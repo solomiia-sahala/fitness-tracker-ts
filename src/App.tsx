@@ -7,6 +7,9 @@ import SignIn from './pages/SignIn';
 import theme from './config/theme.config';
 import Dashboard from './pages/Dashboard';
 import SignUp from './pages/SignUp';
+import ProgressChart from './components/ProgressChart';
+import ManageActivity from './components/ManageActivity';
+import FitnessJournal from './components/FitnessJournal';
 
 function App(): any {
   return (
@@ -15,7 +18,11 @@ function App(): any {
         <Routes>
           <Route path="/" element={<SignIn />} />
           <Route path="/sign-up" element={<SignUp />} />
-          <Route path="/dashboard" element={<Dashboard />} />
+          <Route path="/dashboard" element={<Dashboard />}>
+            <Route index element={<ManageActivity />} />
+            <Route path="progressChart" element={<ProgressChart />} />
+            <Route path="fitnessJournal" element={<FitnessJournal />} />
+          </Route>
           <Route path="*" element={<Error />} />
         </Routes>
       </ThemeProvider>
