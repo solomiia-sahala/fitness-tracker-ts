@@ -3,9 +3,7 @@ import {
 } from '@mui/material';
 import MenuIcon from '@mui/icons-material/Menu';
 import React, { JSX, useState } from 'react';
-import {
-  NavigateFunction, useNavigate, Outlet, useOutletContext,
-} from 'react-router-dom';
+import { NavigateFunction, useNavigate, Outlet } from 'react-router-dom';
 import { AppBar } from '../components/AppBar';
 import { Drawer } from '../components/Drawer';
 import { withAuthentication } from '../components/hocComponents/withAuthentication';
@@ -13,12 +11,6 @@ import AuthenticationContext from '../contexts/authContext';
 import NotAuthorized from '../components/NotAuthorized';
 import Sidebar from '../components/Sidebar';
 import Firebase from '../services/firebase.service';
-
-type ContextType = { userId: string, firebase: Firebase };
-
-export function useUserContext(): ContextType {
-  return useOutletContext<ContextType>();
-}
 
 function Dashboard({ firebase }: { firebase: Firebase }): JSX.Element {
   const [open, setOpen] = useState<boolean>(true);

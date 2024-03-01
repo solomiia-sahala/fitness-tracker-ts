@@ -1,12 +1,12 @@
 import React, { JSX, useState } from 'react';
 import { Grid, Paper } from '@mui/material';
-import { useUserContext } from '../pages/Dashboard';
 import CreateActivity from './CreateActivity';
 import ActivityList from './ActivityList';
 import { ActionTypes } from '../enums/actionTypes.enum';
 import { Activity } from '../interfaces/activity.interface';
 import { SnackBarMessages } from '../constants/snackBarMessages.const';
 import SnackBar from './SnackBar';
+import { useUserContext } from '../contexts/userContext';
 
 const ManageActivity = (): JSX.Element => {
   const { userId, firebase } = useUserContext();
