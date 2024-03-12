@@ -4,9 +4,6 @@ import {
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ClearIcon from '@mui/icons-material/Clear';
-import { DatePicker, LocalizationProvider } from '@mui/x-date-pickers';
-import dayjs from 'dayjs';
-import { AdapterDayjs } from '@mui/x-date-pickers/AdapterDayjs';
 import { activityType } from '../constants/activityTypes.const';
 import AutocompleteInput from './AutocompleteInput';
 import { ExerciseLevel } from '../enums/exerciseLevels.enum';
@@ -15,23 +12,19 @@ import { Option } from '../interfaces/option.interface';
 import { ActionTypes } from '../enums/actionTypes.enum';
 
 const levelIntensity: Option[] = Object.values(ExerciseLevel).map((level: ExerciseLevel) => ({ label: level } as Option));
-const dateFormat: string = 'YYYY-MM-DD';
-const today = dayjs().format(dateFormat);
 
 const defaultActivityData: Activity = {
   duration: 30,
   type: null,
   level: null,
   addInfo: '',
-  date: today,
-};
+} as Activity;
 
 function CreateActivity({
-  userId, selectedActivity, onCancel, handleAction,
+   selectedActivity, onCancel, handleAction,
 }: {
-  userId: string;
   selectedActivity: { activity: Activity, key: string} | null,
-  handleAction: (actionType: ActionTypes, activity: Activity | null, userId: string, key?: string,) => void,
+  handleAction: (actionType: ActionTypes, activity: Activity | null, key?: string,) => void,
   onCancel: ()=> void
 }): JSX.Element {
   const [activity, setActivity] = useState<Activity>(defaultActivityData);
@@ -49,12 +42,12 @@ function CreateActivity({
   };
 
   const handleSubmit = (): void => {
-    handleAction(ActionTypes.Create, activity, userId);
+    handleAction(ActionTypes.Create, activity);
     setActivity(defaultActivityData);
   };
 
   const handleUpdate = (): void => {
-    handleAction(ActionTypes.Update, activity, userId, selectedActivity!.key);
+    handleAction(ActionTypes.Update, activity, selectedActivity!.key);
     setActivity(defaultActivityData);
   };
 
@@ -67,14 +60,6 @@ function CreateActivity({
       </Typography>
       <Grid container spacing={2}>
         <Grid item xs={12} style={{ display: 'flex', gap: '50px' }}>
-          <LocalizationProvider dateAdapter={AdapterDayjs}>
-            <DatePicker
-              value={dayjs(activity.date)}
-              disablePast
-              views={['year', 'month', 'day']}
-              onChange={(date) => setActivity((prev) => ({ ...prev, date: date!.format(dateFormat) }))}
-            />
-          </LocalizationProvider>
           <AutocompleteInput
             inputLabel="Choose the activity type"
             selectedOption={activity.type ? { label: activity.type } as Option : null}

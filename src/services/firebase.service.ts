@@ -18,6 +18,7 @@ import {
 } from 'firebase/storage';
 import { firebaseConfig } from '../config/firebase.config';
 import { Activity } from '../interfaces/activity.interface';
+import { ActivityListInterface } from '../interfaces/activityLIst.interface';
 
 export default class Firebase {
   app: FirebaseApp;
@@ -76,7 +77,7 @@ export default class Firebase {
   }
 
   // fetch data only once
-  fetchActivitiesByUid(uid: string): Promise<any> {
+  fetchActivitiesByUid(uid: string): Promise<ActivityListInterface> {
     const dbRef = databaseRef(this.db);
     const activities = get(child(dbRef, `users/${uid}/activities`)).then((snapshot) => {
       if (snapshot.exists()) {
@@ -91,11 +92,27 @@ export default class Firebase {
   }
 
   // create subscription on change for activitiesRef
-  fetchActivitiesByUid$(uid: string, updateData: (data: any)=> void): Unsubscribe {
+  fetchActivitiesByUid$(uid: string, updateData: (data: ActivityListInterface)=> void): Unsubscribe {
     const activitiesRef = databaseRef(this.db, `users/${uid}/activities`);
     const unsubscribe = onValue(activitiesRef, (snapshot) => {
       const data = snapshot.val();
       updateData(data);
+    });
+    return unsubscribe;
+  }
+
+  // create subscription on change for activitiesRef
+  fetchActivitiesByDate$(uid: string, selectedDate: string, updateData: (data: ActivityListInterface)=> void): Unsubscribe {
+    const activitiesRef = databaseRef(this.db, `users/${uid}/activities`);
+    const unsubscribe = onValue(activitiesRef, (snapshot) => {
+      const data = snapshot.val();
+            const matchedActivities = Object.entries(data).reduce((acc, [key, value]) => {
+              if ((value as Activity).date === selectedDate) {
+                acc[key] = <Activity>value;
+              }
+              return acc;
+            }, {} as ActivityListInterface);
+      updateData(matchedActivities);
     });
     return unsubscribe;
   }
