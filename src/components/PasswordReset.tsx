@@ -11,8 +11,9 @@ import {
 import React, { JSX, useState } from 'react';
 import { withFirebase } from './hocComponents/withFirebase';
 import SnackBar from './SnackBar';
+import Firebase from '../services/firebase.service';
 
-function PasswordReset(props: any) : JSX.Element {
+function PasswordReset({ firebase }: { firebase: Firebase }) : JSX.Element {
   const [open, setOpen] = useState<boolean>(false);
   const [openAlert, setOpenAlert] = useState<boolean>(false);
   const [state, setState] = useState<{ email: string, error: string | null }>({ email: '', error: null });
@@ -32,7 +33,7 @@ function PasswordReset(props: any) : JSX.Element {
   };
 
   const handleSubmit = (): void => {
-    props.firebase.resetPassword(state.email)
+    firebase.resetPassword(state.email)
       .then(() => {
         setState({ email: '', error: null });
         handleClose();

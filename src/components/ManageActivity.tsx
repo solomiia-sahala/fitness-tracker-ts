@@ -1,5 +1,5 @@
 import React, { JSX, useState } from 'react';
-import { Grid, Paper } from '@mui/material';
+import { Grid } from '@mui/material';
 import dayjs from 'dayjs';
 import CreateActivity from './CreateActivity';
 import ActivityList from './ActivityList';
@@ -10,6 +10,7 @@ import SnackBar from './SnackBar';
 import { useUserContext } from '../contexts/userContext';
 import Calendar from './Calendar';
 import { formatDate } from '../utils/utils';
+import PaperItem from './Paper';
 
 const today = dayjs();
 
@@ -35,6 +36,7 @@ const ManageActivity = (): JSX.Element => {
         request = firebase.updateActivity(userId, null, key!);
         break;
       default:
+        throw new Error();
     }
 
     // eslint-disable-next-line @typescript-eslint/ban-ts-comment
@@ -55,42 +57,26 @@ const ManageActivity = (): JSX.Element => {
   return (
     <Grid container spacing={4}>
       <Grid item xs={12} md={6} lg={4}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 340,
-            width: '100%',
-          }}
-        >
+        <PaperItem height={340}>
           <Calendar
             userId={userId}
             firebase={firebase}
             selectDate={selectedDate}
             onSelectDate={(date) => setSelectedDate(date)}
           />
-        </Paper>
+        </PaperItem>
       </Grid>
       <Grid item xs={12} md={6} lg={8}>
-        <Paper
-          sx={{
-            p: 2,
-            display: 'flex',
-            flexDirection: 'column',
-            height: 390,
-            width: '100%',
-          }}
-        >
+        <PaperItem height={390}>
           <CreateActivity
             selectedActivity={selectedActivity}
             handleAction={handleAction}
             onCancel={() => setSelectedActivity(null)}
           />
-        </Paper>
+        </PaperItem>
       </Grid>
       <Grid item xs={12}>
-        <Paper sx={{ p: 2, display: 'flex', flexDirection: 'column' }}>
+        <PaperItem>
           <ActivityList
             userId={userId}
             firebase={firebase}
@@ -98,7 +84,7 @@ const ManageActivity = (): JSX.Element => {
             handleAction={handleAction}
             onEdit={onEditActivity}
           />
-        </Paper>
+        </PaperItem>
       </Grid>
       <SnackBar isOpen={snackbarConfig.isOpen} message={snackbarConfig.message} />
     </Grid>

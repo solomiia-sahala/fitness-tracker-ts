@@ -8,6 +8,7 @@ import { JSX } from 'react';
 import EditNoteIcon from '@mui/icons-material/EditNote';
 import DeleteForeverIcon from '@mui/icons-material/DeleteForever';
 import { Activity } from '../interfaces/activity.interface';
+import { ExerciseStatus } from '../enums/exerciseStatus.enum';
 
 interface ActivitiesTableProps {
     activities: any;
@@ -24,7 +25,7 @@ const ActivitiesTable = ({
     <Table stickyHeader>
       <TableHead>
         <TableRow>
-          <TableCell>Date</TableCell>
+          <TableCell>Status</TableCell>
           <TableCell>Type</TableCell>
           <TableCell>Level</TableCell>
           <TableCell>Duration</TableCell>
@@ -35,11 +36,11 @@ const ActivitiesTable = ({
       <TableBody>
         {Object.values(activities || {}).length ? Object.values(activities || {}).map((activity: any, i: number) => {
           const {
-            level, type, duration, addInfo, date,
+            level, type, duration, addInfo, exerciseStatus,
           } = activity as Activity;
           return (
             <TableRow key={i}>
-              <TableCell>{date}</TableCell>
+              <TableCell>{exerciseStatus ?? ExerciseStatus.Uncompleted}</TableCell>
               <TableCell>{type}</TableCell>
               <TableCell>{level}</TableCell>
               <TableCell>{`${duration} min.`}</TableCell>

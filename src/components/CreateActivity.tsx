@@ -1,6 +1,6 @@
-import { JSX, useEffect, useState } from 'react';
+import React, { JSX, useEffect, useState } from 'react';
 import {
-  Button, Grid, Slider, Stack, TextField, Typography,
+ Button, Grid, Slider, Stack, TextField, Typography,
 } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -10,10 +10,13 @@ import { ExerciseLevel } from '../enums/exerciseLevels.enum';
 import { Activity } from '../interfaces/activity.interface';
 import { Option } from '../interfaces/option.interface';
 import { ActionTypes } from '../enums/actionTypes.enum';
+import { ExerciseStatus } from '../enums/exerciseStatus.enum';
 
 const levelIntensity: Option[] = Object.values(ExerciseLevel).map((level: ExerciseLevel) => ({ label: level } as Option));
+const completedStatus: Option[] = Object.values(ExerciseStatus).map((label: ExerciseStatus) => ({ label } as Option));
 
 const defaultActivityData: Activity = {
+  exerciseStatus: ExerciseStatus.Uncompleted,
   duration: 30,
   type: null,
   level: null,
@@ -59,12 +62,22 @@ function CreateActivity({
         { selectedActivity?.activity ? 'Update the activity ' : 'Create new activity ' }
       </Typography>
       <Grid container spacing={2}>
-        <Grid item xs={12} style={{ display: 'flex', gap: '50px' }}>
+        <Grid item xs={6} style={{ display: 'flex', gap: '50px' }}>
           <AutocompleteInput
             inputLabel="Choose the activity type"
             selectedOption={activity.type ? { label: activity.type } as Option : null}
             options={activityType}
             formName="type"
+            handleOptionSelect={handleOptionSelect}
+          />
+        </Grid>
+
+        <Grid item xs={6}>
+          <AutocompleteInput
+            inputLabel="Choose the activity status"
+            selectedOption={{ label: activity.exerciseStatus } as Option}
+            options={completedStatus}
+            formName="exerciseStatus"
             handleOptionSelect={handleOptionSelect}
           />
         </Grid>

@@ -1,0 +1,21 @@
+:root {
+    --active-background-color: grey;
+    --white: #ffffff;
+}
+
+.chart-tabs {
+    &.YEAR button:first-child  {
+         background-color: var(--active-background-color);
+         color: var(--white);
+      }
+
+     &.MONTH button:nth-child(2) {
+          background-color: var(--active-background-color);
+          color: var(--white);
+      }
+
+      &.WEEK button:last-child {
+           background-color: var(--active-background-color);
+           color: var(--white);
+       }
+}
