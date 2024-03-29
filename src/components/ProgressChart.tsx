@@ -20,6 +20,14 @@ defaults.plugins.title.display = true;
 defaults.plugins.title.align = 'start';
 defaults.plugins.title.color = 'black';
 
+const getPluginsConfig = (text: string): { plugins: { title: { text: string } } } => ({
+    plugins: {
+        title: {
+            text,
+        },
+    },
+});
+
 const initialChartData = {
     activeAction: CHART_DATE_DURATION.YEAR,
     chart1: [],
@@ -33,7 +41,9 @@ const actionCreators = {
     countWeek: (allActivities: Activity[]) => ({ type: CHART_DATE_DURATION.WEEK, payload: allActivities }),
 };
 
-function reducer(state: any, action: { type: string, payload: Activity[]}): any {
+type ACTION_TYPE = { type: string, payload: Activity[] }
+
+function reducer(state: typeof initialChartData, action: ACTION_TYPE): typeof initialChartData {
     switch (action.type) {
         case CHART_DATE_DURATION.YEAR:
             return {
@@ -108,14 +118,6 @@ const ProgressChart = (): JSX.Element => {
     useEffect(() => {
         getUserStatistics();
     }, []);
-
-    const getPluginsConfig = (text: string): { plugins: { title: { text: string } } } => ({
-        plugins: {
-            title: {
-                text,
-            },
-        },
-    });
 
     return (
       <Grid container spacing={4}>

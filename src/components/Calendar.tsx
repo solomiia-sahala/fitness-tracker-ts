@@ -51,7 +51,7 @@ interface CalendarProps {
 function Calendar({
  userId, firebase, selectDate, onSelectDate,
 }: CalendarProps): JSX.Element {
-  const requestAbortController: MutableRefObject<any> = useRef(null);
+  const requestAbortController: MutableRefObject<any> = useRef<HTMLElement | null>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [highlightedDays, setHighlightedDays] = useState<number[]>([]);
 
@@ -75,7 +75,7 @@ function Calendar({
     return () => requestAbortController.current?.abort();
   }, [selectDate]);
 
-  const handleMonthChange = (date: any): void => {
+  const handleMonthChange = (date: dayjs.Dayjs): void => {
     if (requestAbortController.current) {
       // make sure that you are aborting useless requests
       // because it is possible to switch between months pretty quickly
